@@ -1,0 +1,63 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Markdown Previewer</title>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="root" style="text-align: center; margin-top:50px"></div>
+
+    <script type="text/babel">
+
+  class App extends React.Component{
+  constructor(props){
+  super(props)
+  this.state = {editor:"", preview:""}
+  this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(event){
+  this.setState({[event.target.name]: event.target.value}, function(){
+       //var marked = require('marked');
+       console.log(marked(this.state.editor));
+       this.setState({preview: marked(this.state.editor)})
+  });
+  console.log("First Name"+this.state.editor)
+  console.log("lAST NAME:"+this.state.preview)
+  }
+
+  render(){
+  var style = {
+  width: "40%",
+  height: "500px",
+  marginRight: "15px",
+  }
+  var style2 = {
+  width: "50%",
+  height: "-webkit-fill-available",
+  marginLeft: "15px",
+  }
+  return (
+  <div>
+    <textarea style = {style} name="editor" onChange = {this.handleChange} value = {this.state.editor}/>
+    <textarea style = {style2} name="preview" value = {this.state.preview}/>
+  </div>
+  )
+
+  }
+  }
+
+
+
+  ReactDOM.render(
+  <App/>,
+  document.getElementById('root')
+  );
+
+  </script>
+  </body>
+  </html>
