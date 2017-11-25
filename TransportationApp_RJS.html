@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transportation App</title>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+  </head>
+
+<script type="text/babel">
+var styleTable = {
+  fontSize: 20,
+  width: "80%",
+  border: "1px solid grey",
+  "text-align": "left",
+  "border-collapse": "collapse"
+};
+
+var styleTR = {
+  fontSize: 20,
+  border: "1px solid grey",
+  "border-spacing": 10,
+  "border-collapse": "collapse"
+};
+
+var styleTH = {
+  fontSize: 20,
+  border: "1px solid grey",
+  background: "#efefef"
+};
+
+var styleTD = {
+  fontSize: 20,
+  border: "1px solid grey"
+};
+
+function Title(props) {
+  return (
+    <div>
+      <h2>{props.title}</h2>
+      <p>{props.subTitle}</p>
+    </div>
+  );
+}
+
+function DropdownValues(props) {
+  return <option value={props.values}>{props.values}</option>;
+}
+
+function ChooseOptions(props) {
+  return (
+    <div>
+      <h2>{props.header}</h2>
+      <div>
+        {" "}
+        New Only
+        <input
+          type="checkbox"
+          id="coding"
+          name="interest"
+          value="coding"
+          checked
+        />
+      </div>
+      <div>
+        <p />
+        {props.title}
+        <select>
+          <DropdownValues values="All"/>
+          <DropdownValues values="Cars"/>
+          <DropdownValues values="Trucks"/>
+          <DropdownValues values="Convertibles"/>
+        </select>
+
+      </div>
+
+    </div>
+  );
+}
+
+function TableHeader(props) {
+  return <th style={styleTH}>{props.header}</th>;
+}
+
+function TableData(props) {
+  return <td style={styleTD}>{props.data}</td>;
+}
+
+function TableButton(props) {
+  return <td style={styleTD}> <button><b>{props.text}</b></button></td>;
+}
+
+function TransportType(props) {
+  return <h2>{props.type}</h2>;
+}
+
+function TransportList(props) {
+  return (
+    <div>
+      <ul>
+        <table cellPadding="10" style={styleTable}>
+          <tr style={styleTR}>
+            <TableHeader header="Year" />
+            <TableHeader header="Model" />
+            <TableHeader header="Price" />
+            <TableHeader header="Buy" />
+          </tr>
+          <tr style={styleTR}>
+            <TableData data={props.data[0]} />
+            <TableData data={props.data[1]} />
+            <TableData data={props.data[2]} />
+            <TableButton text={props.data[3]} />
+          </tr>
+        </table>
+      </ul>
+    </div>
+  );
+}
+
+function TransportationApp(props) {
+  return (
+    <div>
+      <Title
+        title="Welcome to React Transportation"
+        subTitle="The best place to buy vehicles online"
+      />
+      <ChooseOptions header="Choose Options" title="Select Type" />
+      <TransportType type="Car" />
+      <TransportList data={["2013", "A", "$3200", "Buy Now"]} />
+      <TransportList data={["2011", "B", "$4400", "Buy Now"]} />
+      <TransportList data={["2016", "B", "$15500", "Buy Now"]} />
+      <TransportType type="Trucks" />
+      <TransportList data={["2014", "D", "$18000", "Buy Now"]} />
+      <TransportList data={["2013", "E", "$5200", "Buy Now"]} />
+      <TransportType type="Convertibles" />
+      <TransportList data={["2009", "F", "$2000", "Buy Now"]} />
+      <TransportList data={["2010", "G", "$6000", "Buy Now"]} />
+      <TransportList data={["2012", "H", "$12500", "Buy Now"]} />
+      <TransportList data={["2017", "M", "$50000", "Buy Now"]} />
+    </div>
+  );
+}
+
+ReactDOM.render(<TransportationApp/>, document.getElementById("root"));
+
+</script>
+  <body>
+    <div id="root"></div>
+</body>
+
+</html>
