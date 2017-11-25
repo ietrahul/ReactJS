@@ -13,11 +13,16 @@
 
     <script type="text/babel">
 
+function createMarkup(props) {
+  return {__html: props};
+}
+
   class App extends React.Component{
   constructor(props){
   super(props)
   this.state = {editor:"", preview:""}
-  this.handleChange = this.handleChange.bind(this)
+  this.handleChange = this.handleChange.bind(this);
+  //this.createMarkup = this.createMarkup.bind(this);
   }
 
   handleChange(event){
@@ -30,21 +35,31 @@
   console.log("lAST NAME:"+this.state.preview)
   }
 
+  //createMarkup() { return {__html: props}; }
+
   render(){
+  var style0 = {
+   display: "flex",
+  }
+
   var style = {
   width: "40%",
   height: "500px",
+  marginLeft: "20px",
   marginRight: "15px",
   }
+
   var style2 = {
   width: "50%",
   height: "-webkit-fill-available",
   marginLeft: "15px",
+  textAlign: "left",
   }
+
   return (
-  <div>
+  <div style={style0}>
     <textarea style = {style} name="editor" onChange = {this.handleChange} value = {this.state.editor}/>
-    <textarea style = {style2} name="preview" value = {this.state.preview}/>
+    <div style = {style2} name="preview" dangerouslySetInnerHTML= {createMarkup(this.state.preview)}/>
   </div>
   )
 
