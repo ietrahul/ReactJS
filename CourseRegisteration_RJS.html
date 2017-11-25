@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Course Registration</title>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+ function PostButton(props){
+    var style = {
+        width: 30,
+        height:24
+    }
+    return (
+        <button style = {style} onClick = { () => props.handleClick()}>{props.label}</button>
+    )
+}
+
+function PostText(props){
+    var style = {
+        border:"1px solid white",
+        width: props.width
+    }
+    return (
+        <div style = {style}>{props.text}</div>
+    )
+}
+
+function DisplayHeader(props){
+  var style = {
+    display:"flex",
+    fontWeight: "bold"
+  }
+  return (
+          <div style = {style}>
+          <PostText text="Remove" width="150"/>
+          <PostText text="First Name" width="150"/>
+          <PostText text="Last Name" width="150"/>
+          <PostText text="Activity" width="150"/>
+           <PostText text="Restrictions" width="150"/>
+          </div>
+  )
+}
+
+function DisplayData(props){
+  var style = {
+    display:"flex",
+    fontWeight: "bold"
+  }
+  return (
+         <tr><td><PostButton label = "x" handleClick = {props.removeItem}/>
+          </td><td><PostText text={props.fName}/>
+          </td><td><PostText text={props.lName}/>
+          </td><td><PostText text={props.selectActivity}/>
+           </td><td><PostText text={props.restrictions}/>
+           </td></tr>
+  )
+}
+
+function PostList(props){
+  var styleTable = {
+  fontSize: 20,
+  width: "80%",
+  "text-align": "center",
+  "border-collapse": "collapse"
+};
+    return (
+      <table style={styleTable}>
+        <tr>
+          <th>Remove</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Activity</th>
+          <th>Restrictions</th>
+          </tr>
+        {
+            props.postList.map((item,index) =>
+                <DisplayData key = {index}
+                      fName = {item.fName}
+                      lName = {item.lName}
+                      selectActivity = {item.selectActivity}
+                      restrictions = {item.restrictions}
+                      removeItem = {() => props.removeItem(index)}
+                />
+             )
+         }
+        </table>
+    )
+}
+
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {fName:"", lName:"", selectActivity:"",restrictions : "", isA: false, isB: false, isC: false, items : []}
+    this.handleChange = this.handleChange.bind(this)
+ }
+
+  handleChange(event){
+      if (event.target.type === 'checkbox'){
+        this.setState({[event.target.name]: event.target.checked})
+        //console.log(this.state.isA)
+      } else {
+        this.setState({[event.target.name]: event.target.value})
+        //console.log("First Name"+this.state.fName)
+        //console.log("lAST NAME:"+this.state.lName)
+      }
+
+    }
+
+  addItem(){
+        var itemsCopy = this.state.items.slice()
+        var fName = this.state.fName;
+        var lName = this.state.lName;
+        var selectActivity = this.state.selectActivity;
+        var restrictions = this.state.isA ? "a" : ""
+            restrictions += this.state.isB ? "b" : ""
+            restrictions += this.state.isC ? "c" : ""
+        //console.log("this.state.isA--"+this.state.isA)
+       // console.log("this.state.isB--"+this.state.isB)
+        //console.log("this.state.isC--"+this.state.isC)
+       // console.log("restrictions--"+restrictions)
+        itemsCopy.push({"fName":fName,"lName":lName, "selectActivity": selectActivity, "restrictions":restrictions})
+        itemsCopy.sort((a,b)=>{
+          return b.fName < a.fName;
+        })
+        this.setState({fName:"", lName:"", selectActivity:"",restrictions : "", isA: false, isB: false, isC: false, items : itemsCopy})
+    }
+
+  removeItem(index){
+        var itemsCopy = this.state.items.slice()
+        itemsCopy.splice(index,1);
+        itemsCopy.sort((a,b) => {
+            return b.fName < a.fName
+        })
+
+        this.setState({items:itemsCopy})
+    }
+
+  render(){
+        var array = ["Science Lab","Swimming","Cooking","Painting"]
+        var options = array.map( (item) =>
+            <option value = {item}>{item}</option>
+        )
+    return (
+      <div>
+        First Name<br /> <input name="fName" value = {this.state.fName} onChange = {this.handleChange}/><br />
+      Last Name<br /><input name="lName" value = {this.state.lName} onChange = {this.handleChange}/><br />
+      Select Activity<br /><select name = "selectActivity" value={this.state.selectActivity} onChange={this.handleChange}>
+                    {options}
+                </select><br />
+      Check all that apply:<br />
+       <input type = "checkbox" checked = {this.state.isA} onChange = {this.handleChange} name="isA"/>
+           a) Dietary Restrictions <br />
+        <input type = "checkbox" checked = {this.state.isB} onChange = {this.handleChange} name="isB"/>
+           b) Physical Disabilities <br />
+        <input type = "checkbox" checked = {this.state.isC} onChange = {this.handleChange} name="isC"/>
+           c) Medical Needs <br />
+                                  <button onClick = { () => this.addItem()} style={{width: 150, height:35}}> Submit </button>
+          <PostList postList = {this.state.items} removeItem = {this.removeItem.bind(this)}/>
+          </div>
+    )
+  }
+
+}
+
+ReactDOM.render(
+    <App/>,
+    document.getElementById("root")
+)
+
+    </script>
+  </body>
+</html>
