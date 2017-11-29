@@ -1,0 +1,62 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Leaderboard</title>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="root" style="text-align: center; margin-top:50px"></div>
+
+    <script type="text/babel">
+
+function TableData(props) {
+var styleTable = {
+  fontSize: 20,
+  width: "80%",
+  "text-align": "center",
+  border: "1px solid black",
+  backgroundColor: "green",
+};
+
+return (
+      <table style={styleTable}>
+        <tr colspan="4">
+          <th colspan="4">Leaderboard</th>
+        </tr>
+        <tr>
+          <th>#</th>
+          <th>Camper Name</th>
+          <th>Points in past 30 days</th>
+          <th>All time points</th>
+          </tr>
+        </table>
+    )
+}
+
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {items : []}
+ }
+
+  render(){
+    return (
+      <div>
+           <TableData postList = {this.state.items}/>
+       </div>
+    )
+  }
+
+}
+  ReactDOM.render(
+  <App/>,
+  document.getElementById('root')
+  );
+
+  </script>
+  </body>
+  </html>
