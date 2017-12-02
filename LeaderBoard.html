@@ -34,8 +34,8 @@ return (
         <tr>
           <th>#</th>
           <th>Camper Name</th>
-          <th>Points in past 30 days</th>
-          <th>Alltime points</th>
+          <th className="sortDataDes" onClick = {() => props.handleSort("recent")}>Points in past 30 days</th>
+          <th className="sortDataDes" onClick = {() => props.handleSort("alltime")} >Alltime points</th>
           </tr>
            { props.rowdata.map((item,index) =>
                 <TableDataRows key = {index}
@@ -55,6 +55,7 @@ class App extends React.Component{
   constructor(props){
     super(props)
     this.state = {data : []}
+    this.handleSort = this.handleSort.bind(this)
  }
 
 componentDidMount(){
@@ -75,10 +76,20 @@ componentDidMount(){
 
  }
 
+ handleSort(columnName){
+    console.log("Inside Sort--"+columnName)
+      var dataCopy = this.state.data.slice();
+      //acsc sort
+      dataCopy.sort((a,b) => {
+            return a.alltime - b.alltime
+        })
+     this.setState({data:dataCopy})
+ }
+
   render(){
     return (
       <div>
-           <TableData rowdata = {this.state.data}/>
+           <TableData rowdata = {this.state.data} handleSort = {this.handleSort}/>
        </div>
     )
   }

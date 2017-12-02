@@ -22,3 +22,21 @@ img {
 .number {
    text-align: right;
 }
+
+.sortDataDes:hover {
+  background-color: gray;
+  cursor: pointer;
+}
+
+.sortDataDes::after {
+  content: '\25bc';
+  padding-left: 0.5em;
+}
+
+.sortDataAsc:after {
+    content: '\25b2';
+    padding-left: 0.5em;
+}
+
+
+
