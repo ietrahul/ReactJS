@@ -17,7 +17,7 @@
 
 function TableDataRows(props){
   return (
-      <tr>
+      <tr className= {props.seq % 2 == 0? "trAleternateColor":""}>
       <td>{props.seq}</td>
       <td className="char"><img src={props.img}/>{props.username}</td>
       <td className="number">{props.recent}</td>
@@ -27,15 +27,15 @@ function TableDataRows(props){
 }
 
 function TableData(props) {
-  console.log("data--"+props.postList);
+  console.log("data--"+props.rowdata);
 return (
       <table className="styleTable">
-          <th colSpan="4">Leaderboard</th>
-        <tr>
+          <th colSpan="4" className="tableDesc">Leaderboard</th>
+        <tr className="tableHeader">
           <th>#</th>
           <th>Camper Name</th>
-          <th className="sortDataDes" onClick = {() => props.handleSort("recent")}>Points in past 30 days</th>
-          <th className="sortDataDes" onClick = {() => props.handleSort("alltime")} >Alltime points</th>
+          <th id="sortable" className={props.sortByAlltime === true ? "" : "sortDataDes"} onClick = {() => props.handleSort("recent")}>Points in past 30 days</th>
+          <th id= "sortable" className={props.sortByAlltime === true ? "sortDataDes" : ""} onClick = {() => props.handleSort("alltime")} >Alltime points</th>
           </tr>
            { props.rowdata.map((item,index) =>
                 <TableDataRows key = {index}
@@ -54,16 +54,16 @@ return (
 class App extends React.Component{
   constructor(props){
     super(props)
-    this.state = {data : []}
+    this.state = {sortByAlltime: true, data : []}
     this.handleSort = this.handleSort.bind(this)
  }
 
 componentDidMount(){
    console.log("start componentDidMount");
-  var alltimeurl = 'https://fcctop100.herokuapp.com/api/fccusers/top/alltime'
+  var url = this.state.sortByAlltime === true ? 'https://fcctop100.herokuapp.com/api/fccusers/top/alltime': 'https://fcctop100.herokuapp.com/api/fccusers/top/recent'
   var that = this;
 
-  fetch(alltimeurl)
+  fetch(url)
   .then(function(response) {
     if (response.status >= 400) {
       throw new Error("Bad response from server");
@@ -78,18 +78,52 @@ componentDidMount(){
 
  handleSort(columnName){
     console.log("Inside Sort--"+columnName)
+    var url;
+    var that = this;
+     if (columnName === 'alltime' && !this.state.sortByAlltime){
+         url = "https://fcctop100.herokuapp.com/api/fccusers/top/alltime";
+         this.setState({sortByAlltime:true})
+            fetch(url)
+  .then(function(response) {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    return response.json();
+  })
+  .then(function(data) {
+    that.setState({data: data});
+  });
+
+     } else if (columnName === 'recent' && this.state.sortByAlltime){
+        url = "https://fcctop100.herokuapp.com/api/fccusers/top/recent";
+        this.setState({sortByAlltime:false})
+           fetch(url)
+  .then(function(response) {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    return response.json();
+  })
+  .then(function(data) {
+    that.setState({data: data});
+  });
+
+}
+  /*
+  if (columnName === 'alltime'){
       var dataCopy = this.state.data.slice();
       //acsc sort
       dataCopy.sort((a,b) => {
             return a.alltime - b.alltime
         })
      this.setState({data:dataCopy})
+     }*/
  }
 
   render(){
     return (
       <div>
-           <TableData rowdata = {this.state.data} handleSort = {this.handleSort}/>
+           <TableData rowdata = {this.state.data} sortByAlltime = {this.state.sortByAlltime} handleSort = {this.handleSort}/>
        </div>
     )
   }
