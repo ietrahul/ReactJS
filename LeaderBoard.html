@@ -2,7 +2,7 @@
   <html>
   <head>
     <title>Leaderboard</title>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" http-equiv=”x-ua-compatible” content=”IE=edge” />
     <link rel="stylesheet" href="leaderBoard.css">
     <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
     <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
@@ -19,7 +19,7 @@ function TableDataRows(props){
   return (
       <tr className= {props.seq % 2 == 0? "trAleternateColor":""}>
       <td>{props.seq}</td>
-      <td className="char"><img src={props.img}/>{props.username}</td>
+      <td className="char"><img src={props.img}/><span className="username">{props.username}</span></td>
       <td className="number">{props.recent}</td>
       <td className="number">{props.alltime}</td>
       </tr>
@@ -35,7 +35,7 @@ return (
           <th>#</th>
           <th>Camper Name</th>
           <th id="sortable" className={props.sortByAlltime === true ? "" : "sortDataDes"} onClick = {() => props.handleSort("recent")}>Points in past 30 days</th>
-          <th id= "sortable" className={props.sortByAlltime === true ? "sortDataDes" : ""} onClick = {() => props.handleSort("alltime")} >Alltime points</th>
+          <th id= "sortable" className={props.sortByAlltime === true ? "sortDataDes" : ""} onClick = {() => props.handleSort("alltime")} >All time points</th>
           </tr>
            { props.rowdata.map((item,index) =>
                 <TableDataRows key = {index}
