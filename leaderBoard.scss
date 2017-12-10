@@ -1,0 +1,86 @@
+@mixin border($size, $color){
+    border: $size solid $color;
+}
+
+#root {
+  text-align: center;
+  margin-top:50px;
+  div {
+    text-align: -webkit-center;
+    text-align: -ms-center;
+}
+}
+
+table {
+  font-size: 20px;
+  /*border-collapse: collapse;*/
+  width: 80%;
+  max-width: 1000px;
+  @include border(2px,green);
+  border-radius: 10px;
+  margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  border-spacing: 0px;
+
+  .tableDesc {
+  background-color: green;
+  color: white;
+  font-size: 30px;
+  }
+
+.tableHeader {
+  background-color: #e7e7e7;
+  color: black;
+  height: 50px;
+  width: 100px;
+  @include border(2px, #c0b9b9);
+  #sortable:hover {
+          background-color: gray;
+          cursor: pointer;
+      }
+
+    .sortDataDes:hover {
+      background-color: gray;
+      cursor: pointer;
+    }
+
+    .sortDataDes::after {
+      content: '\25bc';
+      padding-left: 0.5em;
+    }
+ }
+
+  .trAleternateColor {
+     background-color: #e7e7e7;
+   }
+
+   tr{
+    .char {
+        text-align: left;
+   }
+   .number {
+    text-align: center;
+  }
+ }
+
+  td {
+     @include border(1px, #c0b9b9);
+     img {
+          width: 30px;
+          height: 30px;
+          margin: 5px 10px 5px 5px;
+          border: 2px solid green;
+          position: relative;
+          top: 2px;
+        }
+
+     .username {
+          position: relative;
+          bottom: 10px;
+        }
+
+
+  }
+
+}
