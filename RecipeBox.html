@@ -73,11 +73,13 @@ class RecipeApp extends React.Component{
     return (
     <div>
       <TableDataRows data={ JSON.parse(localStorage.getItem("recipe")) } />
-      <button onclick = {this.togglePopup}> Add recipe </button>
+      <br/>
+      <button onClick={this.togglePopup.bind(this)}> Add recipe </button>
+
        { this.state.showPopup && <div className='popup'>
         <div className='popup_inner'>
           <h1>Add Ingredients</h1>
-        <button onClick={this.togglePopup}>close me</button>
+        <button onClick={this.togglePopup}>X</button>
 
 
            <form onSubmit={this.handleSubmit}>
