@@ -1,0 +1,110 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Recipe Box</title>
+    <meta charset="UTF-8" http-equiv=”x-ua-compatible” content=”IE=edge” />
+    <link rel="stylesheet" href="recipeCSS.css">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+function TableDataRows(props){
+   console.log(props.data);
+  return (
+      <table>
+      <tr>
+      <td>aa</td>
+      <td>bb</td>
+      <td>cc</td>
+      </tr>
+       {
+         props.data.map((items,index)=>
+          <tr>
+            <td>{items.title}</td>
+            <td>{items.ingredients}</td>
+          </tr>
+         )
+
+       }
+
+      </table>
+  )
+}
+
+
+class RecipeApp extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {recipeName: "", ingredients: "", showPopup: false };
+
+    var initRecipe = [{"title":"Curd Rice", "ingredients": ["Curd","Rice","Salt","Cumin seeds"]},
+                      {"title":"Khichadi", "ingredients": ["Rice","Pulses","Salt","Ghee","Turmeric"]}
+                     ];
+
+    localStorage.setItem("recipe",JSON.stringify(initRecipe));
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
+  }
+
+  togglePopup() {
+    console.log("inside toggle");
+    this.setState({showPopup: !this.state.showPopup});
+    console.log("End toggle");
+  }
+
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render(){
+    return (
+    <div>
+      <TableDataRows data={ JSON.parse(localStorage.getItem("recipe")) } />
+      <button onclick = {this.togglePopup}> Add recipe </button>
+       { this.state.showPopup && <div className='popup'>
+        <div className='popup_inner'>
+          <h1>Add Ingredients</h1>
+        <button onClick={this.togglePopup}>close me</button>
+
+
+           <form onSubmit={this.handleSubmit}>
+        <label>
+          Recipe Name: <input name="recipeName" type="text" value={this.state.recipeName} onChange={this.handleChange} />
+        </label>
+        <br/>
+        <label>
+          Ingredients: <textarea name="ingredients" value={this.state.ingredients} onChange={this.handleChange} />
+        </label>
+        <br/>
+        <input type="submit" value="Submit" />
+      </form>
+       </div>
+      </div>
+      }
+   </div>
+    )
+  }
+
+}
+
+  ReactDOM.render(
+  <RecipeApp />,
+  document.getElementById('root')
+  );
+
+  </script>
+  </body>
+  </html>
