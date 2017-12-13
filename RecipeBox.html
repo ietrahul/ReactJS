@@ -48,7 +48,7 @@ class RecipeApp extends React.Component{
                       {"title":"Khichadi", "ingredients": ["Rice","Pulses","Salt","Ghee","Turmeric"]}
                      ];
 
-    localStorage.setItem("recipe",JSON.stringify(initRecipe));
+    if(!localStorage.getItem("recipe")) localStorage.setItem("recipe",JSON.stringify(initRecipe));
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
@@ -64,8 +64,13 @@ class RecipeApp extends React.Component{
     this.setState({[event.target.name]: event.target.value});
   }
 
-  handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
+  handleSubmit() {
+    //console.log("start---")
+    var  customData = JSON.parse(localStorage.getItem("recipe"));
+    var re = /\s*,\s*/
+    customData.push({"title": this.state.recipeName, "ingredients": this.state.ingredients.split(re)});
+    //console.log("2---"+customData)
+    localStorage.setItem("recipe",JSON.stringify(customData));
     event.preventDefault();
   }
 
@@ -79,10 +84,8 @@ class RecipeApp extends React.Component{
        { this.state.showPopup && <div className='popup'>
         <div className='popup_inner'>
           <h1>Add Ingredients</h1>
-        <button onClick={this.togglePopup}>X</button>
-
-
-           <form onSubmit={this.handleSubmit}>
+         <button onClick={this.togglePopup}>X</button><br/>
+        <form onSubmit={this.handleSubmit}>
         <label>
           Recipe Name: <input name="recipeName" type="text" value={this.state.recipeName} onChange={this.handleChange} />
         </label>
