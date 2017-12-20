@@ -18,23 +18,20 @@
 function TableDataRows(props){
    console.log(props.data);
   return (
-      <table>
-      <tr>
-      <td>aa</td>
-      <td>bb</td>
-      <td>cc</td>
-      </tr>
+      <div className="main">
        {
          props.data.map((items,index)=>
-          <tr>
-            <td>{items.title}</td>
-            <td>{items.ingredients}</td>
-          </tr>
-         )
+         <div> <div className="recipe" onClick = { () => props.showIngredients()}>{items.title}</div>
+          {items.ingredients.map((item2, index)=>
+                <div className="ingredients" id="abc">  {item2}  </div>
+            )
 
+            }
+         </div>
+        )
        }
+  </div>
 
-      </table>
   )
 }
 
@@ -52,6 +49,7 @@ class RecipeApp extends React.Component{
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.showIngredients = this.showIngredients.bind(this);
   }
 
   togglePopup() {
@@ -72,12 +70,20 @@ class RecipeApp extends React.Component{
     //console.log("2---"+customData)
     localStorage.setItem("recipe",JSON.stringify(customData));
     event.preventDefault();
+    //reset form data and close
+    this.setState({recipeName: "", ingredients: "", showPopup: !this.state.showPopup});
+  }
+
+  showIngredients(){
+    console.log("show here");
+    const listmenu = document.getElementById('abc');
+    listmenu.style.display = 'block';
   }
 
   render(){
     return (
     <div>
-      <TableDataRows data={ JSON.parse(localStorage.getItem("recipe")) } />
+      <TableDataRows data={ JSON.parse(localStorage.getItem("recipe")) }  showIngredients={this.showIngredients} />
       <br/>
       <button onClick={this.togglePopup.bind(this)}> Add recipe </button>
 
