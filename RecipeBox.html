@@ -21,13 +21,17 @@ function TableDataRows(props){
       <div className="main">
        {
          props.data.map((items,index)=>
-         <div> <div className="recipe" onClick = { () => props.showIngredients()}>{items.title}</div>
+         <div> <div className="recipe" onClick = { () => props.showIngredients(items.title)}>{items.title}</div>
+           <div className="ingredients" id={items.title}>
+            <b>Ingredients <br/><hr/> </b>
           {items.ingredients.map((item2, index)=>
-                <div className="ingredients" id="abc">  {item2}  </div>
+                <div>  {item2}  </div>
             )
 
             }
-         </div>
+            <button onClick = { () => props.removeRecipe(index)}>Delete</button>
+            <button onClick = { () => props.editRecipe(index)}>Edit</button>
+         </div></div>
         )
        }
   </div>
@@ -45,11 +49,13 @@ class RecipeApp extends React.Component{
                       {"title":"Khichadi", "ingredients": ["Rice","Pulses","Salt","Ghee","Turmeric"]}
                      ];
 
-    if(!localStorage.getItem("recipe")) localStorage.setItem("recipe",JSON.stringify(initRecipe));
+    if(!localStorage.getItem("_ietrahul_recipe")) localStorage.setItem("_ietrahul_recipe",JSON.stringify(initRecipe));
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
     this.showIngredients = this.showIngredients.bind(this);
+    this.removeRecipe = this.removeRecipe.bind(this);
+    this.editRecipe = this.editRecipe.bind(this);
   }
 
   togglePopup() {
@@ -64,26 +70,40 @@ class RecipeApp extends React.Component{
 
   handleSubmit() {
     //console.log("start---")
-    var  customData = JSON.parse(localStorage.getItem("recipe"));
+    var  customData = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
     var re = /\s*,\s*/
     customData.push({"title": this.state.recipeName, "ingredients": this.state.ingredients.split(re)});
     //console.log("2---"+customData)
-    localStorage.setItem("recipe",JSON.stringify(customData));
+    localStorage.setItem("_ietrahul_recipe",JSON.stringify(customData));
     event.preventDefault();
     //reset form data and close
     this.setState({recipeName: "", ingredients: "", showPopup: !this.state.showPopup});
   }
 
-  showIngredients(){
+  showIngredients(idName){
     console.log("show here");
-    const listmenu = document.getElementById('abc');
-    listmenu.style.display = 'block';
+    const listmenu = document.getElementById(idName);
+    listmenu.style.display = listmenu.style.display ==='block' ? 'none' : 'block';
+  }
+
+  removeRecipe(index){
+    var  customDataCopy = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    customDataCopy.splice(index,1);
+    customDataCopy.sort((a,b) => {
+            return b.title < a.title
+        })
+    localStorage.setItem("_ietrahul_recipe",JSON.stringify(customDataCopy));
+  }
+
+  editRecipe(index){
+    var  customDataCopy = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    this.setState({recipeName: customDataCopy[index].title, ingredients: customDataCopy[index].ingredients, showPopup: !this.state.showPopup});
   }
 
   render(){
     return (
     <div>
-      <TableDataRows data={ JSON.parse(localStorage.getItem("recipe")) }  showIngredients={this.showIngredients} />
+      <TableDataRows data={ JSON.parse(localStorage.getItem("_ietrahul_recipe")) }  showIngredients={this.showIngredients} removeRecipe={this.removeRecipe} editRecipe={this.editRecipe}/>
       <br/>
       <button onClick={this.togglePopup.bind(this)}> Add recipe </button>
 
