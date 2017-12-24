@@ -15,6 +15,29 @@
 
     <script type="text/babel">
 
+function ShowPoup(props){
+   return (
+   <div className='popup'>
+     <div className='popup_inner'>
+         <span> <button className="btn-close" onClick={ () => props.togglePopup()}>X</button>
+         <h2>Add/Edit Recipe</h2>
+           </span>
+         <form onSubmit={() => props.handleSubmit()}>
+          <label>
+            <b>Recipe</b> <input className="input-text" name="recipeName" type="text" value={props.recipeName} onChange={() => props.handleChange(event)} />
+          </label>
+          <br/><br/>
+          <label>
+            <b>Ingredients</b> <textarea name="ingredients" value={props.ingredients} onChange={() => props.handleChange(event)} />
+          </label>
+          <br/>
+          <input className="btn-save" type="submit" value="Submit" />
+         </form>
+     </div>
+   </div>
+   )
+}
+
 function TableDataRows(props){
    console.log(props.data);
   return (
@@ -43,19 +66,26 @@ function TableDataRows(props){
 class RecipeApp extends React.Component{
   constructor(props){
     super(props)
-    this.state = {recipeName: "", ingredients: "", showPopup: false };
+    this.state = {recipeName: "", ingredients: "", showPopup: false, recipeList: []};
 
     var initRecipe = [{"title":"Curd Rice", "ingredients": ["Curd","Rice","Salt","Cumin seeds"]},
                       {"title":"Khichadi", "ingredients": ["Rice","Pulses","Salt","Ghee","Turmeric"]}
                      ];
 
-    if(!localStorage.getItem("_ietrahul_recipe")) localStorage.setItem("_ietrahul_recipe",JSON.stringify(initRecipe));
+    if(!localStorage.getItem("_ietrahul_recipe"))
+       { localStorage.setItem("_ietrahul_recipe",JSON.stringify(initRecipe));
+       }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
     this.showIngredients = this.showIngredients.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
+  }
+
+  componentDidMount(){
+    var  customData = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    this.setState({recipeList: customData});
   }
 
   togglePopup() {
@@ -70,14 +100,17 @@ class RecipeApp extends React.Component{
 
   handleSubmit() {
     //console.log("start---")
-    var  customData = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    var  customData = this.state.recipeList;
     var re = /\s*,\s*/
     customData.push({"title": this.state.recipeName, "ingredients": this.state.ingredients.split(re)});
     //console.log("2---"+customData)
+    customData.sort((a,b) => {
+            return b.title < a.title
+        })
     localStorage.setItem("_ietrahul_recipe",JSON.stringify(customData));
     event.preventDefault();
     //reset form data and close
-    this.setState({recipeName: "", ingredients: "", showPopup: !this.state.showPopup});
+    this.setState({recipeName: "", ingredients: "", showPopup: !this.state.showPopup, recipeList: customData});
   }
 
   showIngredients(idName){
@@ -87,44 +120,29 @@ class RecipeApp extends React.Component{
   }
 
   removeRecipe(index){
-    var  customDataCopy = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    var  customDataCopy = this.state.recipeList;
     customDataCopy.splice(index,1);
     customDataCopy.sort((a,b) => {
             return b.title < a.title
         })
     localStorage.setItem("_ietrahul_recipe",JSON.stringify(customDataCopy));
+    this.setState({recipeList: customDataCopy});
   }
 
   editRecipe(index){
-    var  customDataCopy = JSON.parse(localStorage.getItem("_ietrahul_recipe"));
+    var  customDataCopy = this.state.recipeList;
     this.setState({recipeName: customDataCopy[index].title, ingredients: customDataCopy[index].ingredients, showPopup: !this.state.showPopup});
   }
 
   render(){
     return (
-    <div>
-      <TableDataRows data={ JSON.parse(localStorage.getItem("_ietrahul_recipe")) }  showIngredients={this.showIngredients} removeRecipe={this.removeRecipe} editRecipe={this.editRecipe}/>
+    <div className="outer-main">
+      <TableDataRows data={this.state.recipeList}  showIngredients={this.showIngredients} removeRecipe={this.removeRecipe} editRecipe={this.editRecipe}/>
       <br/>
-      <button onClick={this.togglePopup.bind(this)}> Add recipe </button>
-
-       { this.state.showPopup && <div className='popup'>
-        <div className='popup_inner'>
-          <h1>Add Ingredients</h1>
-         <button onClick={this.togglePopup}>X</button><br/>
-        <form onSubmit={this.handleSubmit}>
-        <label>
-          Recipe Name: <input name="recipeName" type="text" value={this.state.recipeName} onChange={this.handleChange} />
-        </label>
-        <br/>
-        <label>
-          Ingredients: <textarea name="ingredients" value={this.state.ingredients} onChange={this.handleChange} />
-        </label>
-        <br/>
-        <input type="submit" value="Submit" />
-      </form>
-       </div>
-      </div>
-      }
+      <button className="btn-info" onClick={this.togglePopup.bind(this)}> Add Recipe </button>
+       { this.state.showPopup &&
+       <ShowPoup togglePopup={this.togglePopup} handleChange={this.handleChange} handleSubmit={this.handleSubmit} recipeName={this.state.recipeName} ingredients={this.state.ingredients} />
+       }
    </div>
     )
   }
