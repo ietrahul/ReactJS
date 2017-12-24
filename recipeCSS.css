@@ -10,7 +10,7 @@
    width: 700px;
    margin: auto;
    background-color: #f2f2f2;
-   border: 2px solid gray;
+   border: 1px solid #80808052;
    border-radius: 8px;
    font-size: 25px;
    padding: 20px;
@@ -22,13 +22,15 @@
 
 .recipe{
     text-align: left;
-    background-color: gray;
-    color: white;
+    background-color: #7bf280d9;
+    color:  #006400;
     height: 30px;
     border-radius: 8px;
     cursor: pointer;
-    padding-left: 12px;
-    border: 2px solid gray;
+    padding: 5px 5px 0px 12px;
+    font-size: 20px;
+    font-weight: bold;
+    /*border: 2px solid #80808052;*/
 }
 
 
@@ -40,15 +42,15 @@
     padding: 24px;
     background-color: white;
     margin-top: -10px !important;
-    border: 2px solid gray;
+    border: 1px solid #80808052;
     border-radius: 8px;
 }
 
 .ingredients div {
-   background-color: white;
+    background-color: white;
     text-align: left;
     font-size: 20px;
-    padding-left: 48px;
+    padding-left: 150px;
 }
 
 hr {
@@ -109,13 +111,13 @@ textarea {
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    border: 1px solid gray;
 }
 
 button {
   margin: 10px;
   width: 120px;
   height: 30px;
+  font-size: 20px;
   border: none;
   outline:none;
   color: white;
@@ -124,15 +126,29 @@ button {
 }
 
 .btn-info{
-    width: 200px;
-    height: 40px;
-    background:  #195EA3;
-    font-size: 25px;
+    width: 150px;
+    height: 35px;
+    background:  #008CBA;
+    font-size: 22px;
+}
+
+.btn-info-small {
+    background:  #008CBA;
+}
+
+.btn-danger {
+    background:  #d9534f;
+}
+
+.btn-close-normal{
+  background: white;
+  color: black;
+  border: 1px solid #808080ed;
 }
 
 .btn-close{
     position: relative;
-    border: none;
+    color: black;
     background: white;
     width: 30px;
     opacity: 0.5;
@@ -150,10 +166,12 @@ input[type=submit]{
   width: 120px;
   height: 30px;
   border: none;
+  outline: none;
   text-decoration: none;
   border-radius: 5px;
   background:  #4CAF50;
   color: white;
+  font-size: 20px;
 }
 
 input[type=submit]:hover {

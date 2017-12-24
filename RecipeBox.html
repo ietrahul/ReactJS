@@ -31,7 +31,8 @@ function ShowPoup(props){
             <b>Ingredients</b> <textarea name="ingredients" value={props.ingredients} onChange={() => props.handleChange(event)} />
           </label>
           <br/>
-          <input className="btn-save" type="submit" value="Submit" />
+          <input className="btn-save" type="submit" value={props.saveSubmit === "Submit" ? "Submit" : "Save"} />
+          <button className="btn-close-normal" onClick={ () => props.togglePopup()}>Close</button>
          </form>
      </div>
    </div>
@@ -52,8 +53,8 @@ function TableDataRows(props){
             )
 
             }
-            <button onClick = { () => props.removeRecipe(index)}>Delete</button>
-            <button onClick = { () => props.editRecipe(index)}>Edit</button>
+            <button className="btn-danger" onClick = { () => props.removeRecipe(index)}>Delete</button>
+            <button className="btn-info-small" onClick = { () => props.editRecipe(index)}>Edit</button>
          </div></div>
         )
        }
@@ -62,11 +63,19 @@ function TableDataRows(props){
   )
 }
 
+function getIndex(value, arr, prop) {
+    for(var i = 0; i < arr.length; i++) {
+        if(arr[i][prop] === value) {
+            return i;
+        }
+    }
+    return -1; //to handle the case where the value doesn't exist
+}
 
 class RecipeApp extends React.Component{
   constructor(props){
     super(props)
-    this.state = {recipeName: "", ingredients: "", showPopup: false, recipeList: []};
+    this.state = {recipeName: "", ingredients: "", showPopup: false, recipeList: [], saveSubmit: "Submit", prevIdName: ""};
 
     var initRecipe = [{"title":"Curd Rice", "ingredients": ["Curd","Rice","Salt","Cumin seeds"]},
                       {"title":"Khichadi", "ingredients": ["Rice","Pulses","Salt","Ghee","Turmeric"]}
@@ -90,7 +99,7 @@ class RecipeApp extends React.Component{
 
   togglePopup() {
     console.log("inside toggle");
-    this.setState({showPopup: !this.state.showPopup});
+    this.setState({recipeName: "", ingredients: "", showPopup: !this.state.showPopup, saveSubmit: "Submit"});
     console.log("End toggle");
   }
 
@@ -102,7 +111,10 @@ class RecipeApp extends React.Component{
     //console.log("start---")
     var  customData = this.state.recipeList;
     var re = /\s*,\s*/
-    customData.push({"title": this.state.recipeName, "ingredients": this.state.ingredients.split(re)});
+     var index = getIndex(this.state.recipeName , customData, 'title');
+     console.log("Find recipe--"+ index);
+    if (index >= 0) customData.splice(index,1);
+      customData.push({"title": this.state.recipeName, "ingredients": this.state.ingredients.split(re)});
     //console.log("2---"+customData)
     customData.sort((a,b) => {
             return b.title < a.title
@@ -115,8 +127,21 @@ class RecipeApp extends React.Component{
 
   showIngredients(idName){
     console.log("show here");
-    const listmenu = document.getElementById(idName);
-    listmenu.style.display = listmenu.style.display ==='block' ? 'none' : 'block';
+    var prevIdName = this.state.prevIdName;
+    if ( prevIdName === idName){
+      const listmenu = document.getElementById(idName);
+      listmenu.style.display = listmenu.style.display ==='block' ? 'none' : 'block';
+      this.setState({prevIdName: ""});
+    } else {
+      var listmenu = document.getElementById(idName);
+      listmenu.style.display = listmenu.style.display ==='block' ? 'none' : 'block';
+      if (prevIdName.length > 0){
+        listmenu = document.getElementById(prevIdName);
+        listmenu.style.display = listmenu.style.display ==='block' ? 'none' : 'block';
+        }
+      this.setState({prevIdName: idName});
+    }
+
   }
 
   removeRecipe(index){
@@ -131,7 +156,7 @@ class RecipeApp extends React.Component{
 
   editRecipe(index){
     var  customDataCopy = this.state.recipeList;
-    this.setState({recipeName: customDataCopy[index].title, ingredients: customDataCopy[index].ingredients, showPopup: !this.state.showPopup});
+    this.setState({recipeName: customDataCopy[index].title, ingredients: customDataCopy[index].ingredients, showPopup: !this.state.showPopup, saveSubmit: "Save"});
   }
 
   render(){
@@ -141,7 +166,7 @@ class RecipeApp extends React.Component{
       <br/>
       <button className="btn-info" onClick={this.togglePopup.bind(this)}> Add Recipe </button>
        { this.state.showPopup &&
-       <ShowPoup togglePopup={this.togglePopup} handleChange={this.handleChange} handleSubmit={this.handleSubmit} recipeName={this.state.recipeName} ingredients={this.state.ingredients} />
+       <ShowPoup togglePopup={this.togglePopup} handleChange={this.handleChange} handleSubmit={this.handleSubmit} recipeName={this.state.recipeName} ingredients={this.state.ingredients} saveSubmit={this.state.saveSubmit}/>
        }
    </div>
     )
