@@ -1,0 +1,175 @@
+#root {
+  margin-top: 50px;
+}
+
+.outer-main {
+  width: 700px;
+  margin: auto;
+
+  .main {
+    width: 700px;
+    margin: auto;
+    background-color: #f2f2f2;
+    border: 1px solid #80808052;
+    border-radius: 8px;
+    font-size: 25px;
+    padding: 20px;
+
+    div {
+      margin-bottom: 10px;
+      .recipe {
+        text-align: left;
+        background-color: #7bf280d9;
+        color: #006400;
+        height: 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 5px 5px 0px 12px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .ingredients {
+        text-align: center;
+        font-size: 25px;
+        display: none;
+        padding: 24px;
+        background-color: white;
+        margin-top: -10px !important;
+        border: 1px solid #80808052;
+        border-radius: 8px;
+
+        div {
+          background-color: white;
+          text-align: left;
+          font-size: 20px;
+          padding-left: 150px;
+        }
+      }
+    }
+  }
+}
+
+hr {
+  width: 350px;
+}
+
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .popup_inner {
+    position: absolute;
+    min-width: 300px;
+    min-height: 270px;
+    left: 35%;
+    right: 35%;
+    top: 35%;
+    bottom: 35%;
+    margin: auto;
+    background: white;
+    text-align: left;
+    padding: 5px 20px 20px 20px;
+    border-radius: 5px;
+
+    form {
+      label {
+        margin: 10px;
+        textarea {
+          width: 85%;
+          height: 48px;
+          margin: 12px 0px 0px 10px;
+          padding: 6px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    h2 {
+      margin-top: -30px;
+    }
+  }
+}
+
+input[type="text"] {
+  width: 85%;
+  height: 30px;
+  padding: 6px;
+  margin: 8px 0px 0px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  margin: 10px;
+  width: 120px;
+  height: 30px;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: white;
+  font-size: 20px;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+button {
+  margin: 10px;
+  width: 120px;
+  height: 30px;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn-info {
+  width: 150px;
+  height: 35px;
+  background: #008cba;
+  font-size: 22px;
+}
+
+.btn-info-small {
+  background: #008cba;
+}
+
+.btn-danger {
+  background: #d9534f;
+}
+
+.btn-close-normal {
+  background: white;
+  color: black;
+  border: 1px solid #808080ed;
+}
+
+.btn-close {
+  position: relative;
+  color: black;
+  background: white;
+  width: 30px;
+  opacity: 0.5;
+  font-size: 25px;
+  margin-top: 10px;
+  margin-left: 93%;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+}

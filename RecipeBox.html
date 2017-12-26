@@ -7,7 +7,6 @@
     <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
     <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
 
   </head>
   <body>
@@ -24,11 +23,11 @@ function ShowPoup(props){
            </span>
          <form onSubmit={() => props.handleSubmit()}>
           <label>
-            <b>Recipe</b> <input className="input-text" name="recipeName" type="text" value={props.recipeName} onChange={() => props.handleChange(event)} />
+            <b>Recipe</b> <input className="input-text" name="recipeName" type="text" required placeholder="Recipe name" value={props.recipeName} onChange={() => props.handleChange(event)} />
           </label>
           <br/><br/>
           <label>
-            <b>Ingredients</b> <textarea name="ingredients" value={props.ingredients} onChange={() => props.handleChange(event)} />
+            <b>Ingredients</b> <textarea name="ingredients" required placeholder="Ingredients, comma seprated" value={props.ingredients} onChange={() => props.handleChange(event)} />
           </label>
           <br/>
           <input className="btn-save" type="submit" value={props.saveSubmit === "Submit" ? "Submit" : "Save"} />
