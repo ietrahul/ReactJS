@@ -1,0 +1,11 @@
+#root {
+  margin-top:3%;
+  text-align: center;
+}
+
+.board {
+    border: 10px ridge gray;
+    padding: 0px;
+    width: fit-content;
+    margin: 0 auto;
+}

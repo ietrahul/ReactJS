@@ -1,0 +1,97 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Game of Life</title>
+    <meta charset="UTF-8" http-equiv=”x-ua-compatible” content=”IE=edge” />
+    <link rel="stylesheet" href="GameOfLifeCSS.css">
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+function Square(props){
+  var color = "white"
+  if(props.cells == 0){
+        color = "black"
+    }
+    else if(props.cells == 2){
+        color = "red"
+    }
+
+  var style = {
+        height:20,
+        width:20,
+        border:"0.2px dotted gray",
+        backgroundColor: color
+    }
+
+   return (
+   <div style = {style}></div>
+   )
+}
+
+function Row(props){
+  var style = {
+        display: "flex",
+    }
+  var square = []
+  for(let i=0; i<50; i++){
+    square.push(<Square key={i} row = {props.row} cells = {props.cells[i]} col = {i}/>)
+  }
+
+   return (
+   <div style={style}>
+       {square}
+   </div>
+
+   )
+}
+
+function Board(props){
+  var rows = []
+  for(let i=0; i<30; i++){
+    rows.push(<Row key={i} cells = {props.cells[i]} row = {i} />)
+  }
+
+   return (
+   <div>
+       {rows}
+   </div>
+
+   )
+}
+
+
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    var cells = []
+    for(let i = 0; i < 30; i++ ){
+          cells.push(new Array(50).fill(0));
+        }
+    this.state = {cells: cells};
+ }
+
+  render(){
+    return (
+      <div className="board">
+        <Board cells = {this.state.cells}/>
+      </div>
+    )
+  }
+
+}
+
+  ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+  );
+
+  </script>
+  </body>
+  </html>
