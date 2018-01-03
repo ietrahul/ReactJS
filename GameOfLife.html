@@ -19,7 +19,7 @@ function Square(props){
   if(props.cells == 0){
         color = "black"
     }
-    else if(props.cells == 2){
+    else if(props.cells == 1){
         color = "red"
     }
 
@@ -74,13 +74,90 @@ class App extends React.Component{
     for(let i = 0; i < 30; i++ ){
           cells.push(new Array(50).fill(0));
         }
+
+    for(let i=0; i < 30; i++){
+      for(let j=0; j < 50; j++){
+      var x = Math.round(Math.random())
+      cells[i][j] = x;
+    }
+    }
+    //console.log("Start cells: " + cells);
+
     this.state = {cells: cells};
+    this.nextGeneration = this.nextGeneration.bind(this);
  }
+
+  nextGeneration(){
+  console.log("**Inside next generation**");
+    var cells = [], deadCells = [], aliveCells = []
+        cells = this.state.cells.slice();
+        //console.log("cells:" + cells);
+        for(let i=0; i < 30; i++){
+          for(let j=0; j < 50; j++){
+             var population = 0;
+             console.log("row:" + i + "  col:" + j + "  Value:" + cells[i][j])
+              if (i > 0 && i < 29 && j > 0 && j < 49){
+                  /*if (i ==28 && j == 48){
+                     console.log("get population:");
+                     console.log(cells[i-1][j-1] + cells[i-1][j] + cells[i-1][j+1] + cells[i][j-1] + cells[i][j+1] + cells[i+1][j-1] + cells[i+1][j] + cells[i+1][j+1]);
+                     }
+                  */
+                 population = cells[i-1][j-1] + cells[i-1][j] + cells[i-1][j+1] + cells[i][j-1] + cells[i][j+1] + cells[i+1][j-1] + cells[i+1][j] + cells[i+1][j+1];
+                 console.log("population:"+population);
+              } else {
+                  //console.log("population0:"+population);
+                  if (i-1 >= 0 && j-1 >= 0) population += cells[i-1][j-1]
+                  //console.log("population01:"+population);
+                  if (i-1 >=0)  population +=cells[i-1][j]
+                  //console.log("population02:"+population);
+                  if (i-1 >= 0 && j+1 <= 49) population += cells[i-1][j+1]
+                  //console.log("population03:"+population);
+                  if (j-1 >= 0) population +=cells[i][j-1]
+                  //console.log("population04:"+population);
+                  if (j+1 <= 49) population +=cells[i][j+1]
+                  //console.log("population05:"+population);
+                  if (i+1 <= 29 && j-1 >= 0) population += cells[i+1][j-1]
+                  //console.log("population06:"+population);
+                  if (i+1 <= 29)  population +=cells[i+1][j]
+                  //console.log("population07:"+population);
+                  if (i+1 <= 29 && j+1 <= 49) population += cells[i+1][j+1]
+                  console.log("population:"+population);
+              }
+             if (cells[i][j] == 1 && (population < 2 || population > 3)) {
+                //live cell if under or over populated then dies
+                //cells[i][j] = 0;
+                deadCells.push([i,j]);
+             } else if (cells[i][j] == 0 && population == 3) {
+                //Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction
+                //cells[i][j] = 1;
+                aliveCells.push([i,j]);
+             }
+
+          } //inner for loop
+        }
+      if (deadCells.length > 0) {
+        for(let i=0; i < deadCells.length; i++){
+          cells[deadCells[i][0]][deadCells[i][1]] = 0;
+        }
+      }
+
+      if (aliveCells.length > 0){
+        for(let i=0; i < aliveCells.length; i++){
+          cells[aliveCells[i][0]][aliveCells[i][1]] = 1;
+        }
+      }
+
+     this.setState({cells: cells});
+  } //nextGenration ends here
+
 
   render(){
     return (
+      <div>
       <div className="board">
         <Board cells = {this.state.cells}/>
+      </div>
+       <button onClick = { () => this.nextGeneration()}>Start</button>
       </div>
     )
   }
