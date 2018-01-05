@@ -1,3 +1,7 @@
+body {
+background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
 #root {
   margin-top:3%;
   text-align: center;
