@@ -27,11 +27,12 @@ function Square(props){
         height:17,
         width: 17,
         border:"0.1px dotted gray",
-        backgroundColor: color
+        backgroundColor: color,
+        "pointer-events": "auto",
     }
 
    return (
-   <div style = {style}></div>
+   <div style = {style}  onClick = {() => props.handleClick(props.row,props.col)}></div>
    )
 }
 
@@ -41,7 +42,7 @@ function Row(props){
     }
   var square = []
   for(let i=0; i<50; i++){
-    square.push(<Square key={i} row = {props.row} cells = {props.cells[i]} col = {i}/>)
+    square.push(<Square key={i} row = {props.row} cells = {props.cells[i]} col = {i} handleClick = {props.handleClick} />)
   }
 
    return (
@@ -55,7 +56,7 @@ function Row(props){
 function Board(props){
   var rows = []
   for(let i=0; i<30; i++){
-    rows.push(<Row key={i} cells = {props.cells[i]} row = {i} />)
+    rows.push(<Row key={i} cells = {props.cells[i]} row = {i} handleClick = {props.handleClick} />)
   }
 
    return (
@@ -85,7 +86,22 @@ class App extends React.Component{
 
     this.state = {cells: cells, count: 0, intVar: null, pause: false, clear: false};
     this.nextGeneration = this.nextGeneration.bind(this);
+    this.handleClick = this.handleClick.bind(this);
  }
+
+
+  handleClick(row,col) {
+    console.log("row: " + row + " | col: " + col);
+    //console.log(this.state.count);
+    //console.log(this.state.cells);
+    var temp = []
+        //console.log("--0.0--");
+        temp = this.state.cells.slice();
+        //console.log("--1.0--");
+        temp[row][col] =  temp[row][col] === 0 ? 1 : 0;
+        //console.log("--1.1--");
+        this.setState({cells: temp});
+  }
 
   nextGeneration(){
     //console.log("**Inside next generation**");
@@ -156,7 +172,8 @@ class App extends React.Component{
          var myVar = setInterval(this.nextGeneration.bind(this), 1000);
          this.setState({intVar: myVar, pause: false});
     } else if(this.state.clear) {
-         var cells = []
+       // do not reset board
+       /*  var cells = []
          for(let i = 0; i < 30; i++ ){
                   cells.push(new Array(50).fill(0));
                 }
@@ -167,8 +184,9 @@ class App extends React.Component{
               cells[i][j] = x;
             }
             }
+         */
          var myVar = setInterval(this.nextGeneration.bind(this), 1000);
-         this.setState({cells: cells, intVar: myVar, clear: false});
+         this.setState({intVar: myVar, clear: false});
     } else {
         var myVar = setInterval(this.nextGeneration.bind(this), 1000);
          this.setState({intVar: myVar});
@@ -203,7 +221,7 @@ class App extends React.Component{
           <button className="btn-large">Genration count : {this.state.count}</button>
         </div>
       <div className="board">
-        <Board cells = {this.state.cells}/>
+        <Board cells = {this.state.cells} handleClick = {this.handleClick} />
       </div>
 
       </div>

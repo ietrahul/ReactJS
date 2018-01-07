@@ -69,6 +69,7 @@ button {
     display: inline-block;
     margin: 0 auto;
     background: gray;
+    /*pointer-events: auto;*/
 }
 
 .row {
